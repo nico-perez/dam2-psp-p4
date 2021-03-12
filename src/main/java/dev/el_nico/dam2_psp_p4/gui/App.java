@@ -7,11 +7,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
+
+    public static final Executor worker = Executors.newSingleThreadExecutor();
 
     private static Scene scene;
 
