@@ -53,7 +53,7 @@
       </AnchorPane>
       <HBox>
          <children>
-            <VBox prefHeight="400.0">
+            <VBox>
                <children>
                 <Button minWidth="-Infinity" mnemonicParsing="false" prefWidth="80.0" text="Añadir" />
                   <Button mnemonicParsing="false" prefWidth="80.0" text="Eliminar" />
@@ -63,9 +63,9 @@
                <children>
                   <HBox>
                      <children>
-                        <VBox>
+                        <VBox HBox.hgrow="ALWAYS">
                            <children>
-                              <HBox>
+                              <HBox VBox.vgrow="ALWAYS">
                                  <children>
                                     <Hyperlink text="/root">
                                        <font>
@@ -96,22 +96,22 @@
                                     </Hyperlink>
                                  </children>
                               </HBox>
-                              <TreeView prefHeight="383.0" prefWidth="368.0" />
+                              <TreeView prefHeight="355.0" prefWidth="476.0" />
                            </children>
                         </VBox>
-                        <VBox alignment="TOP_CENTER">
+                        <VBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Detalles" />
                               <ListView />
-                              <Separator prefWidth="200.0" />
+                              <Separator />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Contenido" />
-                              <TextArea editable="false" prefHeight="420.0" prefWidth="209.0" />
+                              <TextArea editable="false" />
                            </children>
                         </VBox>
                      </children>
                   </HBox>
                   <Separator prefWidth="200.0" />
-                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER_RIGHT">
                      <children>
                         <Button mnemonicParsing="false" text="Apagar" />
                      </children>
