@@ -34,8 +34,13 @@ public class SesionFtp {
         return usuarioLogeado;
     }
 
-    public static boolean login(String user, String pass) {
+    public static boolean login(String user, String pass, String host) {
         try {
+            if (!host.equals("localhost")) {
+                ftpClient = new FTPClient();
+                ftpClient.connect(host);
+            }
+
             if (!ftpClient.isConnected()) ftpClient = establecerConexion();
             if (ftpClient.login(user, pass)) {
                 usuarioLogeado = user;
@@ -87,6 +92,14 @@ public class SesionFtp {
             e.printStackTrace();
             return Collections.emptyList();
         }
+    }
+
+    public static String pwd() throws IOException {
+        return ftpClient.printWorkingDirectory();
+    }
+
+    public static boolean cwd(String wd) throws IOException {
+        return ftpClient.changeWorkingDirectory(wd);
     }
 
     public static boolean subirFichero(String rutaRemota, String rutaLocal, boolean reemplazar) {

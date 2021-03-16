@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeCell;
@@ -38,6 +39,7 @@ public class ControladorPrincipal extends Controlador implements Initializable {
     private @FXML Button botonCerrarSesion;
     
     private @FXML HBox migasDePan;
+    private @FXML ScrollPane scrollMigas;
     private @FXML TreeView<InfoFtpFile> arbolArchivos;
     private @FXML ListView<String> listaDetalles;
     private @FXML TextArea contenido;
@@ -48,6 +50,7 @@ public class ControladorPrincipal extends Controlador implements Initializable {
     private TreeItem<InfoFtpFile> root;
 
     @Override
+    @SuppressWarnings("unchecked")
     public void initialize(URL arg0, ResourceBundle arg1) {
 
         etiquetaUsuarioConectado.setText(SesionFtp.getUser());
@@ -75,33 +78,68 @@ public class ControladorPrincipal extends Controlador implements Initializable {
                         }
                     }
 
-                    FTPFile f = info.getFile();
-                    if (f != null && f.isFile()) {
-                        App.worker.execute(() -> {
+                    if (e.getClickCount() == 2) {
 
-                            String ruta = info.getRuta() + "/" + info.getNombre();
+                        if (info.esDirectorio()) {
 
-                            String s = SesionFtp.descargarVistaPrevia(ruta);
-                            Platform.runLater(() -> {
-                               contenido.setText(s); 
-                            });
-                        });
+                            TreeItem<InfoFtpFile> este = ((TreeCell<InfoFtpFile>) e.getTarget()).getTreeItem();
+                            este.setExpanded(true);
+                            arbolArchivos.setRoot(este);
+
+                            migasDePan.getChildren().clear();
+
+                            while (este != null)
+                            {
+                                LinkCarpeta nuevo = new LinkCarpeta("/" + este.getValue().getNombre(), este);
+                                nuevo.setOnAction(o -> {
+                                    arbolArchivos.setRoot(nuevo.getItem());
+                                    int i = migasDePan.getChildren().indexOf(nuevo);
+                                    try {
+                                        migasDePan.getChildren().remove(i + 1, migasDePan.getChildren().size());
+                                    } catch (IndexOutOfBoundsException edersrtg) {
+                                        edersrtg.printStackTrace();
+                                    }
+                                });
+                                
+                                migasDePan.getChildren().add(0, nuevo);
+                                
+                                este = este.getParent();
+                            }
+                            scrollMigas.setHvalue(scrollMigas.getHmax());
+                        }                        
+
                     } else {
-                        contenido.setText("");
+
+                        FTPFile f = info.getFile();
+                        if (f != null && f.isFile()) {
+                            App.worker.execute(() -> {
+    
+                                String ruta = info.getRuta() + "/" + info.getNombre();
+    
+                                String s = SesionFtp.descargarVistaPrevia(ruta);
+                                Platform.runLater(() -> {
+                                   contenido.setText(s); 
+                                });
+                            });
+                        } else {
+                            contenido.setText("");
+                        }
+    
+                        ObservableList<String> atributos = FXCollections.observableArrayList(
+                            "NOMBRE: " + info.getNombre(),
+                            "TAMAÑO: " + info.getTamanio(),
+                            "GRUPO: " + info.getGrupo(),
+                            "ENLACE: " + info.getLink(),
+                            "TIMESTAMP: " + info.getTimestamp(),
+                            "USUARIO: " + info.getUsuario(),
+                            "TIPO: " + info.getTipo(),
+                            "PERMISOS: " + info.getPermisos()
+                        );
+    
+                        listaDetalles.getItems().setAll(atributos);
                     }
 
-                    ObservableList<String> atributos = FXCollections.observableArrayList(
-                        "NOMBRE: " + info.getNombre(),
-                        "TAMAÑO: " + info.getTamanio(),
-                        "GRUPO: " + info.getGrupo(),
-                        "ENLACE: " + info.getLink(),
-                        "TIMESTAMP: " + info.getTimestamp(),
-                        "USUARIO: " + info.getUsuario(),
-                        "TIPO: " + info.getTipo(),
-                        "PERMISOS: " + info.getPermisos()
-                    );
-
-                    listaDetalles.getItems().setAll(atributos);
+                   
                 } catch (ClassCastException | NullPointerException ex) {
                     /* nada */
                 }
@@ -116,6 +154,7 @@ public class ControladorPrincipal extends Controlador implements Initializable {
             Platform.runLater(() -> {
                 
                 arbolArchivos.setRoot(root);
+                migasDePan.getChildren().add(new LinkCarpeta("/Directorio de " + SesionFtp.getUser(), root));
                 
             });
 
@@ -280,7 +319,7 @@ public class ControladorPrincipal extends Controlador implements Initializable {
                     .findFirst()
                     .ifPresent(f -> {
 
-                        TreeItem<InfoFtpFile> nodoCarpeta = new TreeItem<InfoFtpFile>(new InfoFtpFile(f, ruta + n));
+                        TreeItem<InfoFtpFile> nodoCarpeta = new TreeItem<InfoFtpFile>(new InfoFtpFile(f, ruta));
                         nodoCarpeta.getValue().setVacio(true);
 
                         if (selecc == null || selecc.getValue().esRaiz()) {

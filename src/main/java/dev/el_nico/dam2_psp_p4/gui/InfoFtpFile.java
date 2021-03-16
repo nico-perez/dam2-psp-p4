@@ -61,7 +61,7 @@ public class InfoFtpFile {
 
     public InfoFtpFile(FTPFile file, String ruta) {
         this.file = file;
-        this.ruta = ruta;
+        this.ruta = ruta.replaceAll("/{2,}", "/");
         esArchivo = file.isFile();
         esDirectorio = file.isDirectory();
     }

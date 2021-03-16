@@ -28,18 +28,24 @@
     <VBox alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
        <children>
           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Inicio de sesión" />
-          <HBox alignment="TOP_RIGHT">
+          <HBox alignment="CENTER_RIGHT">
              <children>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Usuario" />
                 <TextField fx:id="user" minWidth="-Infinity" onAction="#onClickBtnLogin" prefWidth="180.0" text="nico" />
              </children>
           </HBox>
-          <HBox>
+          <HBox alignment="CENTER_RIGHT">
              <children>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Contraseña" />
                 <PasswordField fx:id="pass" onAction="#onClickBtnLogin" prefWidth="180.0" text="nico" />
              </children>
           </HBox>
+            <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="51.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Host" />
+                  <TextField fx:id="host" minWidth="-Infinity" onAction="#onClickBtnLogin" prefWidth="180.0" promptText="localhost" />
+               </children>
+            </HBox>
           <StackPane>
              <children>
                 <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#onClickBtnLogin" prefWidth="80.0" text="Dale" textAlignment="CENTER" />

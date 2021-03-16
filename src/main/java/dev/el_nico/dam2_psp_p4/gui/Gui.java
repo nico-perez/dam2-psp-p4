@@ -13,6 +13,7 @@ public class Gui {
     public static final Image ICONO_CARPETA = cargarIcono("folder");
     public static final Image ICONO_CARPETA_VACIA = cargarIcono("emptyfolder");
     public static final Image ICONO_ARCHIVO = cargarIcono("file");
+    public static final Image ICONO_HELICOPTERO = cargarIcono("helicopter");
 
     public static Controlador cargarEscena(String fxml, Stage ventana) throws IOException {
 

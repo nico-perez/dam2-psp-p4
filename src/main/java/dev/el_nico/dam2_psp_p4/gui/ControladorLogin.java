@@ -17,6 +17,7 @@ public class ControladorLogin extends Controlador {
     
     private @FXML TextField user;
     private @FXML PasswordField pass;
+    private @FXML TextField host;
     private @FXML Button btnLogin;
     private @FXML ImageView gifCargando;
 
@@ -35,12 +36,13 @@ public class ControladorLogin extends Controlador {
 
         } else {
 
+            String stringHost = host.getText().equals("") ? "localhost" : host.getText();
             gifCargando.setVisible(true);
             btnLogin.setText("");
 
             App.worker.execute(() -> {
 
-                if (SesionFtp.login(stringUser, stringPass)) {
+                if (SesionFtp.login(stringUser, stringPass, stringHost)) {
 
                     Platform.runLater(() -> {
 
@@ -49,6 +51,8 @@ public class ControladorLogin extends Controlador {
                             Stage ventanaPrincipal = new Stage();
                             ventanaPrincipal.setMinHeight(400);
                             ventanaPrincipal.setMinWidth(600);
+                            ventanaPrincipal.setTitle("Práctica 4ª de PSP - Cliente FTP");
+                            ventanaPrincipal.getIcons().add(Gui.ICONO_HELICOPTERO);
                             Gui.cargarEscena("main", ventanaPrincipal);
                         } catch (IOException e) {
                             e.printStackTrace();
