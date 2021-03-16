@@ -75,7 +75,15 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="botonDescargarArchivo" disable="true" mnemonicParsing="false" onAction="#descargarArchivo" text="descargar??" />
+            <Button fx:id="botonDescargarArchivo" disable="true" mnemonicParsing="false" onAction="#descargarArchivo">
+               <graphic>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icon/downloadfile.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
          <GridPane.margin>
             <Insets top="17.0" />

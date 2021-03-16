@@ -37,6 +37,7 @@ public class SesionFtp {
 
     public static boolean login(String user, String pass, String host) {
         try {
+            System.out.println("Intentando iniciar sesión...");
             if (!host.equals("localhost")) {
                 ftpClient = new FTPClient();
                 ftpClient.connect(host);
@@ -45,19 +46,22 @@ public class SesionFtp {
             if (!ftpClient.isConnected()) ftpClient = establecerConexion();
             if (ftpClient.login(user, pass)) {
                 usuarioLogeado = user;
+                System.out.println("Usuario autenticado: " + user);
                 return true;
             } else {
+                System.out.println("Usuario no autenticado: " + user);
                 return false;
             }
         } catch (IOException e) {
             e.printStackTrace();
-            ftpClient.getReplyString();
+            System.out.println("Error en login.\n" + ftpClient.getReplyString());
             return false;
         }
     }
 
     public static void logout() {
         try {
+            System.out.println("Intentando cerrar sesión...");
             if (ftpClient.isConnected()) {
                 ftpClient.logout();
             }
@@ -102,7 +106,7 @@ public class SesionFtp {
             if (is) {
                 System.out.println("Fichero descargado en " + f.getAbsolutePath());
             } else {
-                System.out.println("Fichero no descargado");
+                System.out.println("Fichero no descargado: " + rutaRemota);
             }
             return is;
         } catch (IOException e) {
@@ -127,7 +131,7 @@ public class SesionFtp {
                 boolean ok = ftpClient.storeFile(rutaRemota + file.getName(), fis);
 
                 if (ok) {
-                    System.out.println("Archivo subido a " + rutaRemota);
+                    System.out.println("Fichero subido a " + rutaRemota);
                 } else {
                     System.out.println("Error al subir archivo");
                 }
@@ -148,7 +152,7 @@ public class SesionFtp {
             if (ftpClient.makeDirectory(ruta)) {
                 System.out.println("Directorio creado: " + ruta);
             } else {
-                System.out.println("Directorio no creado");
+                System.out.println("Directorio no creado: " + ruta);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -161,7 +165,7 @@ public class SesionFtp {
             if (ok) {
                 System.out.println("Fichero eliminado: " + ruta);
             } else {
-                System.out.println("Fichero no eliminado");
+                System.out.println("Fichero no eliminado: " + ruta);
             }
             return ok;
         } catch (IOException e) {
@@ -211,7 +215,7 @@ public class SesionFtp {
             if (ok) {
                 System.out.println("Directorio eliminado: " + ruta);
             } else {
-                System.out.println("Directorio no eliminado");
+                System.out.println("Directorio no eliminado: " + ruta);
             }
             return ok;
         } catch (IOException e) {
