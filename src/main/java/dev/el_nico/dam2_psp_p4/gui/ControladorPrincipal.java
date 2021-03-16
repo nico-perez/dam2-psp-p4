@@ -37,7 +37,8 @@ public class ControladorPrincipal extends Controlador implements Initializable {
     private @FXML Button botonAniadirCarpeta;
     private @FXML Button botonEliminarCarpeta;
     private @FXML Button botonCerrarSesion;
-    
+    private @FXML Button botonDescargarArchivo;
+
     private @FXML HBox migasDePan;
     private @FXML ScrollPane scrollMigas;
     private @FXML TreeView<InfoFtpFile> arbolArchivos;
@@ -68,13 +69,18 @@ public class ControladorPrincipal extends Controlador implements Initializable {
                     if (info.esRaiz()) {
                         botonEliminarCarpeta.setDisable(true);
                         botonEliminarArchivo.setDisable(true);
+                        botonDescargarArchivo.setDisable(true);
                     } else {
                         if (info.esDirectorio()) {
                             botonEliminarCarpeta.setDisable(false);
                             botonEliminarArchivo.setDisable(true);
+                            botonDescargarArchivo.setDisable(true);
+
                         } else {
                             botonEliminarCarpeta.setDisable(true);
                             botonEliminarArchivo.setDisable(false);
+                            botonDescargarArchivo.setDisable(false);
+
                         }
                     }
 
@@ -244,6 +250,17 @@ public class ControladorPrincipal extends Controlador implements Initializable {
         } else {
             System.out.println("El archivo elegido no se puede subir");
         }
+    }
+
+    public void descargarArchivo() throws IOException {
+
+        TreeItem<InfoFtpFile> selecc = arbolArchivos.getSelectionModel().getSelectedItem();
+
+        if (selecc == null || selecc.getValue() == null || selecc.getValue().esDirectorio() || selecc.getValue().esRaiz()) {
+            return;
+        }
+
+        SesionFtp.descargarFichero(selecc.getValue().getRuta() + "/" + selecc.getValue().getNombre());
     }
 
     public void eliminarArchivo() throws IOException {

@@ -2,6 +2,7 @@ package dev.el_nico.dam2_psp_p4.modelo;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,6 +92,22 @@ public class SesionFtp {
         } catch (IOException e) {
             e.printStackTrace();
             return Collections.emptyList();
+        }
+    }
+
+    public static boolean descargarFichero(String rutaRemota) {
+        try {
+            File f = File.createTempFile("descarga_de_" + getUser() + "_", rutaRemota.substring(rutaRemota.lastIndexOf(".")));
+            boolean is = ftpClient.retrieveFile(rutaRemota, new FileOutputStream(f));
+            if (is) {
+                System.out.println("Fichero descargado en " + f.getAbsolutePath());
+            } else {
+                System.out.println("Fichero no descargado");
+            }
+            return is;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
